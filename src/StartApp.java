@@ -8,7 +8,7 @@ import java.io.IOException;
 public class StartApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartApp.class.getResource("view/main-page.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartApp.class.getResource("view/login-page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("FreightSystem");
         stage.setScene(scene);
