@@ -14,10 +14,10 @@ import java.time.LocalDate;
 
 public class Driver extends User {
     private LocalDate medCertDate;
-    private int medCertNo;
+    private String medCertNo;
     private String DriverLicenseNo;
 
-    public Driver(String login, String password, String name, String surname, LocalDate birthDate, String phoneNo, LocalDate medCertDate, int medCertNo, String driverLicenseNo) {
+    public Driver(String login, String password, String name, String surname, LocalDate birthDate, String phoneNo, LocalDate medCertDate, String medCertNo, String driverLicenseNo) {
         super(login, password, name, surname, birthDate, phoneNo);
         this.medCertDate = medCertDate;
         this.medCertNo = medCertNo;
