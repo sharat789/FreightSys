@@ -37,8 +37,8 @@
                         <ComboBox fx:id="tyreTypeField" layoutX="423.0" layoutY="198.0" prefWidth="150.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="${TyreType.TYRE_1}" />
-                                    <String fx:value="${TyreType.TYRE_2}" />
+                                    <String fx:value="TYRE_1" />
+                                    <String fx:value="TYRE_2" />
                                 </FXCollections>
                             </items>
                         </ComboBox>
