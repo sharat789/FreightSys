@@ -10,6 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import model.TyreType?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxControllers.MainPage">
    <children>
       <TabPane layoutY="33.0" prefHeight="367.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0">
@@ -33,7 +36,14 @@
                         <TextField fx:id="yearField" layoutX="245.0" layoutY="198.0" promptText="Enter year:" />
                         <TextField fx:id="odometerField" layoutX="536.0" layoutY="96.0" prefHeight="25.0" prefWidth="51.0" promptText="Km:" />
                         <TextField fx:id="fuelCapacityField" layoutX="536.0" layoutY="144.0" prefHeight="25.0" prefWidth="51.0" promptText="Litres:" />
-                        <ComboBox fx:id="tyreTypeField" layoutX="423.0" layoutY="198.0" prefWidth="150.0" />
+                        <ComboBox fx:id="tyreTypeField" layoutX="423.0" layoutY="198.0" prefWidth="150.0" >
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="TYRE_1" />
+                                    <String fx:value="TYRE_2" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox >
                         <ListView fx:id="truckListField" layoutX="14.0" layoutY="27.0" prefHeight="284.0" prefWidth="200.0" />
                         <Label layoutX="58.0" layoutY="6.0" text="Company Trucks" />
                         <Label layoutX="423.0" layoutY="100.0" text="Odometer:" />

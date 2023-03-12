@@ -1,10 +1,10 @@
 package fxControllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import model.Truck;
 import model.TyreType;
 import model.User;
@@ -21,9 +21,10 @@ public class MainPage {
     @FXML
     public TextField fuelCapacityField;
     @FXML
-    public ComboBox tyreTypeField;
+    public ComboBox<TyreType> tyreTypeField;
+
     @FXML
-    public ListView truckListField;
+    public ListView<Truck> truckListField;
 
     private User loggedUser;
     public void setInfo(User user){
@@ -32,7 +33,14 @@ public class MainPage {
 
     public void createTruck() {
         System.out.println(loggedUser);
-        Truck truck = new Truck(makeField.getText(), modelField.getText(),Integer.parseInt(yearField.getText()), Double.parseDouble(odometerField.getText()), Double.parseDouble(fuelCapacityField.getText()), TyreType.TYRE_1);
+        Truck truck = new Truck(makeField.getText(), modelField.getText(),Integer.parseInt(yearField.getText()), Double.parseDouble(odometerField.getText()), Double.parseDouble(fuelCapacityField.getText()),  TyreType.valueOf(String.valueOf(tyreTypeField.getSelectionModel().getSelectedItem())));
         truckListField.getItems().add(truck);
+    }
+
+    public void updateTruck() {
+        
+    }
+
+    public void deleteTruck() {
     }
 }

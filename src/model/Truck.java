@@ -27,4 +27,9 @@ public class Truck {
         this.fuelTankCapacity = fuelTankCapacity;
         this.tyreType = tyreType;
     }
+
+    @Override
+    public String toString() {
+        return make + " " + model;
+    }
 }
