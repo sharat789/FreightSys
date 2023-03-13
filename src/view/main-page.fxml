@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
@@ -22,7 +23,31 @@
           </Tab>
           <Tab text="Cargo Management">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="cargoListField" layoutX="14.0" layoutY="34.0" prefHeight="291.0" prefWidth="200.0" />
+                        <TextField fx:id="titleField" layoutX="226.0" layoutY="53.0" promptText="Title:" />
+                        <TextField fx:id="weightField" layoutX="226.0" layoutY="122.0" promptText="Weight:" />
+                        <ComboBox fx:id="CargoTypeField" layoutX="417.0" layoutY="52.0" prefHeight="26.0" prefWidth="146.0" >
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="PAPER" />
+                                    <String fx:value="ALCOHOL" />
+                                    <String fx:value="MIX" />
+                                    <String fx:value="ELECTRONICS" />
+                                    <String fx:value="CONSUMER ELECTRONICS" />
+                                    <String fx:value="FOOD" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <TextField fx:id="customerField" layoutX="416.0" layoutY="122.0" promptText="Customer:" />
+                        <TextArea fx:id="descriptionField" layoutX="226.0" layoutY="180.0" prefHeight="115.0" prefWidth="230.0" promptText="Cargo Description:" />
+                        <Label layoutX="421.0" layoutY="34.0" prefWidth="70.0" text="Cargo Type:" />
+                        <Button layoutX="492.0" layoutY="180.0" mnemonicParsing="false" onAction="#createCargo" prefHeight="26.0" prefWidth="59.0" text="Create" />
+                        <Button layoutX="492.0" layoutY="225.0" mnemonicParsing="false" onAction="#updateCargo" prefHeight="26.0" prefWidth="60.0" text="Update" />
+                        <Button layoutX="492.0" layoutY="270.0" mnemonicParsing="false" onAction="#deleteCargo" prefHeight="26.0" prefWidth="61.0" text="Delete" />
+                     </children>
+                  </AnchorPane>
             </content>
           </Tab>
             <Tab text="Truck Management">
@@ -42,7 +67,7 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <ListView fx:id="truckListField" layoutX="14.0" layoutY="27.0" prefHeight="284.0" prefWidth="200.0" />
+                        <ListView fx:id="truckListField" layoutX="14.0" layoutY="27.0" onMouseClicked="#changeFields" prefHeight="284.0" prefWidth="200.0" />
                         <Label layoutX="58.0" layoutY="6.0" text="Company Trucks" />
                         <Label layoutX="423.0" layoutY="100.0" text="Odometer:" />
                         <Label layoutX="423.0" layoutY="148.0" text="Fuel Tank Capacity:" />

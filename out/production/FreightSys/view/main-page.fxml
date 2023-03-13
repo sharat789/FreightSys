@@ -42,7 +42,7 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <ListView fx:id="truckListField" layoutX="14.0" layoutY="27.0" prefHeight="284.0" prefWidth="200.0" />
+                        <ListView fx:id="truckListField" onMouseClicked="#changeFields" layoutX="14.0" layoutY="27.0" prefHeight="284.0" prefWidth="200.0" />
                         <Label layoutX="58.0" layoutY="6.0" text="Company Trucks" />
                         <Label layoutX="423.0" layoutY="100.0" text="Odometer:" />
                         <Label layoutX="423.0" layoutY="148.0" text="Fuel Tank Capacity:" />
