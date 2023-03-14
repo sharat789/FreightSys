@@ -31,4 +31,9 @@ public class Cargo {
         this.dateCreated = LocalDate.now();
 
     }
+
+    @Override
+    public String toString() {
+        return title + " " + weight;
+    }
 }

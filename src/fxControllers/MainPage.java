@@ -34,7 +34,7 @@ public class MainPage implements Initializable {
 
     @FXML
     public ListView<Truck> truckListField;
-    public ListView cargoListField;
+    public ListView<Cargo> cargoListField;
     public TextField titleField;
     public TextField weightField;
     public ComboBox CargoTypeField;
@@ -127,13 +127,46 @@ public class MainPage implements Initializable {
 
     public void createCargo() {
         Cargo cargo = new Cargo(titleField.getText(), Double.parseDouble(weightField.getText()), CargoType.valueOf(String.valueOf(CargoTypeField.getSelectionModel().getSelectedItem())), descriptionField.getText(), customerField.getText());
+
+        cargoListField.getItems().add(cargo);
     }
 
     public void deleteCargo() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Delete Item");
+        alert.setContentText("Are you sure you want to delete this item?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Cargo cargo = cargoListField.getSelectionModel().getSelectedItem();
+            cargoListField.getItems().remove(cargo);
+        }
+
     }
 
     public void updateCargo() {
+        Cargo cargo = cargoListField.getSelectionModel().getSelectedItem();
+        int index = cargoListField.getSelectionModel().getSelectedIndex();
+        cargo.setTitle(titleField.getText());
+        cargo.setCargoType(CargoType.valueOf(String.valueOf(CargoTypeField.getSelectionModel().getSelectedItem())));
+        cargo.setWeight( Double.parseDouble(weightField.getText()));
+        cargo.setCustomer(customerField.getText());
+        cargo.setDescription(descriptionField.getText());
+        cargoListField.getItems().set(index,cargo);
     }
 
 
+    public void changeCargo(MouseEvent mouseEvent) {cargoListField.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cargo>() {
+        @Override
+        public void changed(ObservableValue<? extends Cargo> observable, Cargo oldValue, Cargo newValue) {
+            titleField.setText(newValue.getTitle());
+            weightField.setText(String.valueOf(newValue.getWeight()));
+            customerField.setText(newValue.getCustomer());
+            descriptionField.setText(newValue.getDescription());
+        }
+
+
+    });
+    }
 }
