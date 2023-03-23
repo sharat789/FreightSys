@@ -5,14 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Entity
 public class Cargo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private LocalDate dateCreated;
@@ -21,6 +24,8 @@ public class Cargo {
     private CargoType cargoType;
     private String description;
     private String customer;
+    @OneToOne
+    private Destination destination;
 
     public Cargo(String title, double weight, CargoType cargoType, String description, String customer) {
         this.title = title;

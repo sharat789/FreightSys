@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import model.Manager;
 import model.User;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -21,6 +23,8 @@ public class LoginPage {
     public TextField loginField;
     @FXML
     public PasswordField passwordField;
+
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("FreightSys");
 
     //temp
     User user = new Manager("admin", "admin", "admin", "admin", LocalDate.parse("2000-01-01"),"asdasd","asdasf");
@@ -49,6 +53,8 @@ public class LoginPage {
     public void register() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LoginPage.class.getResource("../view/registration-page.fxml"));
         Parent parent = fxmlLoader.load();
+        RegistrationPage registrationPage = fxmlLoader.getController();
+        registrationPage.setData(entityManagerFactory);
 //        MainPage mainPage = fxmlLoader.getController();
 //        mainPage.setInfo(user);
         Scene scene = new Scene(parent);

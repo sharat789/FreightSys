@@ -1,5 +1,6 @@
 package fxControllers;
 
+import hibernateControllers.UserHib;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.stage.Stage;
 import model.Driver;
 import model.Manager;
 
+import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -31,19 +33,30 @@ public class RegistrationPage implements Initializable {
     public PasswordField pwField;
     public PasswordField confirmPwField;
 
+    private EntityManagerFactory entityManagerFactory;
+    private UserHib userHib;
+
+    public void setData(EntityManagerFactory entityManagerFactory){
+        this.entityManagerFactory = entityManagerFactory;
+        this.userHib = new UserHib(entityManagerFactory);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         radioD.setSelected(true);
         managerEmailField.setDisable(true);
         isAdminChk.setVisible(false);
+
     }
 
     public void createNewUser() {
         if(radioD.isSelected()){
             Driver driver = new Driver(loginField.getText(), pwField.getText(), nameField.getText(), surnameField.getText(), LocalDate.parse(birthDateField.getValue().toString()), phoneNoField.getText(), LocalDate.parse(medCertDateField.getValue().toString()), medCertNumField.getText(), driverLicenseField.getText());
+
         }
         else{
             Manager manager = new Manager(loginField.getText(), pwField.getText(), nameField.getText(), surnameField.getText(), LocalDate.parse(birthDateField.getValue().toString()), phoneNoField.getText(), managerEmailField.getText());
+            userHib.createManager(manager);
         }
     }
 
