@@ -38,6 +38,8 @@ public class MainPage implements Initializable {
 
     @FXML
     public ListView<Truck> truckListField;
+//    @FXML
+//    public ListView<TruckListParams> truckListView;
     public ListView<Cargo> cargoListField;
     public TextField titleField;
     public TextField weightField;
@@ -63,6 +65,10 @@ public class MainPage implements Initializable {
     private GenericController genericController;
     private ObservableList<DriverTableParams> driverData = FXCollections.observableArrayList();
     private ObservableList<ManagerTableParams> managerData = FXCollections.observableArrayList();
+    private List<Truck> truckList;
+    private List<Cargo> cargoList;
+
+//    private ObservableList<Truck> truckObservableList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,6 +90,24 @@ public class MainPage implements Initializable {
         this.genericController = new GenericController(entityManagerFactory);
         loadDriverData();
         loadManagerData();
+        loadTruckData();
+        loadCargoData();
+    }
+
+    private void loadTruckData() {
+        truckList = genericController.getAllRecords(Truck.class);
+        ObservableList<Truck> truckObservableList = FXCollections.observableArrayList(truckList);
+        for(Truck t: truckList) {
+            truckListField.getItems().add(t);
+        }
+    }
+
+    private void loadCargoData() {
+        cargoList = genericController.getAllRecords(Cargo.class);
+        ObservableList<Cargo> cargoObservableList = FXCollections.observableArrayList(cargoList);
+        for(Cargo c: cargoList) {
+            cargoListField.getItems().add(c);
+        }
     }
 
     private void loadManagerData() {
@@ -135,9 +159,11 @@ public class MainPage implements Initializable {
 
     public void createTruck() {
         Truck truck = new Truck(makeField.getText(), modelField.getText(), Integer.parseInt(yearField.getText()), Double.parseDouble(odometerField.getText()), Double.parseDouble(fuelCapacityField.getText()), TyreType.valueOf(String.valueOf(tyreTypeField.getSelectionModel().getSelectedItem())));
+        genericController.create(truck);
         truckListField.getItems().add(truck);
 
     }
+
 
     public void updateTruck() {
         Truck selectedTruck = truckListField.getSelectionModel().getSelectedItem();
@@ -150,6 +176,7 @@ public class MainPage implements Initializable {
         selectedTruck.setTyreType(TyreType.valueOf(String.valueOf(tyreTypeField.getSelectionModel().getSelectedItem())));
         System.out.println(index);
         truckListField.getItems().set(index, selectedTruck);
+        genericController.update(selectedTruck);
     }
 
     public void deleteTruck() {
@@ -162,6 +189,7 @@ public class MainPage implements Initializable {
         if (result.get() == ButtonType.OK) {
             Truck selectedTruck = truckListField.getSelectionModel().getSelectedItem();
             truckListField.getItems().remove(selectedTruck);
+            genericController.delete(selectedTruck);
         }
 
 
@@ -169,7 +197,7 @@ public class MainPage implements Initializable {
 
     public void createCargo() {
         Cargo cargo = new Cargo(titleField.getText(), Double.parseDouble(weightField.getText()), CargoType.valueOf(String.valueOf(CargoTypeField.getSelectionModel().getSelectedItem())), descriptionField.getText(), customerField.getText());
-
+        genericController.create(cargo);
         cargoListField.getItems().add(cargo);
     }
 
@@ -182,6 +210,7 @@ public class MainPage implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             Cargo cargo = cargoListField.getSelectionModel().getSelectedItem();
+            genericController.delete(cargo);
             cargoListField.getItems().remove(cargo);
         }
 
@@ -196,6 +225,7 @@ public class MainPage implements Initializable {
         cargo.setCustomer(customerField.getText());
         cargo.setDescription(descriptionField.getText());
         cargoListField.getItems().set(index, cargo);
+        genericController.update(cargo);
     }
 
 

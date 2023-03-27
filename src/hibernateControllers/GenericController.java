@@ -59,7 +59,7 @@ public class GenericController {
         EntityManager em = getEntityManager();
         try{
             em.getTransaction().begin();
-            em.remove(entity);
+            em.remove(em.contains(entity) ? entity : em.merge(entity));
             em.getTransaction().commit();
         }
         catch(Exception e){

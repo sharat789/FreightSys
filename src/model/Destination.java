@@ -23,13 +23,13 @@ public class Destination {
     private long startLat;
     private long endLong;
     private long endLat;
-    private LocalDate dateCreated;
-    private LocalDate dateUpdated;
-    @OneToMany(mappedBy = "destination", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Checkpoint> checkpointList;
-    @OneToOne(mappedBy = "currentDestination")
-    private Truck truck;
-    @ManyToMany(mappedBy = "myManagedDestinations" , cascade = CascadeType.ALL)
+            private LocalDate dateCreated;
+            private LocalDate dateUpdated;
+            @OneToMany(mappedBy = "destination", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+            private List<Checkpoint> checkpointList;
+            @OneToOne(mappedBy = "currentDestination")
+            private Truck truck;
+            @ManyToMany(mappedBy = "myManagedDestinations" , cascade = CascadeType.ALL)
     private List<Manager> responsibleManagers;
     @OneToOne(mappedBy = "destination")
     private Cargo cargo;
