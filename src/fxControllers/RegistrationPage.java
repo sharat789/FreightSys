@@ -1,5 +1,6 @@
 package fxControllers;
 
+import hibernateControllers.GenericController;
 import hibernateControllers.UserHib;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -35,10 +36,12 @@ public class RegistrationPage implements Initializable {
 
     private EntityManagerFactory entityManagerFactory;
     private UserHib userHib;
+    private GenericController genericController;
 
     public void setData(EntityManagerFactory entityManagerFactory){
         this.entityManagerFactory = entityManagerFactory;
         this.userHib = new UserHib(entityManagerFactory);
+        this.genericController = new GenericController(entityManagerFactory);
     }
 
     @Override
@@ -52,11 +55,15 @@ public class RegistrationPage implements Initializable {
     public void createNewUser() {
         if(radioD.isSelected()){
             Driver driver = new Driver(loginField.getText(), pwField.getText(), nameField.getText(), surnameField.getText(), LocalDate.parse(birthDateField.getValue().toString()), phoneNoField.getText(), LocalDate.parse(medCertDateField.getValue().toString()), medCertNumField.getText(), driverLicenseField.getText());
+//            userHib.createDriver(driver);
+            genericController.create(driver);
 
         }
         else{
             Manager manager = new Manager(loginField.getText(), pwField.getText(), nameField.getText(), surnameField.getText(), LocalDate.parse(birthDateField.getValue().toString()), phoneNoField.getText(), managerEmailField.getText());
-            userHib.createManager(manager);
+//            userHib.createManager(manager);
+            genericController.create(manager);
+
         }
     }
 

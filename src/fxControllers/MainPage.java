@@ -1,17 +1,21 @@
 package fxControllers;
 
+import hibernateControllers.GenericController;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import model.*;
 
+import javax.persistence.EntityManagerFactory;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,20 +44,75 @@ public class MainPage implements Initializable {
     public ComboBox CargoTypeField;
     public TextField customerField;
     public TextArea descriptionField;
-//    Observable<Truck> items = FXCollections.observableArrayList();
+    @FXML
+    public TableView<DriverTableParams> driverTable;
+
+    public TableColumn<DriverTableParams, Integer> idCol;
+    public TableColumn<DriverTableParams, String> loginCol;
+    public TableColumn<DriverTableParams, String> nameCol;
+    public TableColumn<DriverTableParams, String> licenseCol;
+    @FXML
+    public TableView<ManagerTableParams> managerTable;
+    public TableColumn<ManagerTableParams, Integer> mIdCol;
+    public TableColumn<ManagerTableParams, String> mLoginCol;
+    public TableColumn<ManagerTableParams, String> mNameCol;
+    public TableColumn<ManagerTableParams, String> mEmailCol;
 
     private User loggedUser;
+    private EntityManagerFactory entityManagerFactory;
+    private GenericController genericController;
+    private ObservableList<DriverTableParams> driverData = FXCollections.observableArrayList();
+    private ObservableList<ManagerTableParams> managerData = FXCollections.observableArrayList();
 
-
-    //    private List<Truck> truckList = new ArrayList<>();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        driverTable.setEditable(true);
+        idCol.setCellValueFactory(new PropertyValueFactory<>("idCol"));
+        loginCol.setCellValueFactory(new PropertyValueFactory<>("loginCol"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("nameCol"));
+        licenseCol.setCellValueFactory(new PropertyValueFactory<>("licenseCol"));
+        mIdCol.setCellValueFactory(new PropertyValueFactory<>("mIdCol"));
+        mLoginCol.setCellValueFactory(new PropertyValueFactory<>("mLoginCol"));
+        mNameCol.setCellValueFactory(new PropertyValueFactory<>("mNameCol"));
+        mEmailCol.setCellValueFactory(new PropertyValueFactory<>("mEmailCol"));
     }
 
 
-    public void setInfo(User user) {
+    public void setInfo(User user, EntityManagerFactory entityManagerFactory) {
         this.loggedUser = user;
+        this.entityManagerFactory = entityManagerFactory;
+        this.genericController = new GenericController(entityManagerFactory);
+        loadDriverData();
+        loadManagerData();
+    }
+
+    private void loadManagerData() {
+        List<Manager> managerList = genericController.getAllRecords(Manager.class);
+        for (Manager m : managerList) {
+            ManagerTableParams managerTableParams = new ManagerTableParams();
+            managerTableParams.setmIdCol(m.getId());
+            managerTableParams.setmLoginCol(m.getLogin());
+            managerTableParams.setmNameCol(m.getName());
+            managerTableParams.setmEmailCol(m.getEmail());
+            managerData.add(managerTableParams);
+        }
+
+        managerTable.setItems(managerData);
+    }
+
+    private void loadDriverData() {
+        List<Driver> driverList = genericController.getAllRecords(Driver.class);
+        for (Driver d : driverList) {
+            DriverTableParams driverTableParams = new DriverTableParams();
+            driverTableParams.setIdCol(d.getId());
+            driverTableParams.setLoginCol(d.getLogin());
+            driverTableParams.setNameCol(d.getName());
+            driverTableParams.setLicenseCol(d.getDriverLicenseNo());
+            driverData.add(driverTableParams);
+        }
+
+        driverTable.setItems(driverData);
+
     }
 
     public void changeFields(MouseEvent mouseEvent) {
@@ -75,22 +134,12 @@ public class MainPage implements Initializable {
 
 
     public void createTruck() {
-//        System.out.println(loggedUser);
         Truck truck = new Truck(makeField.getText(), modelField.getText(), Integer.parseInt(yearField.getText()), Double.parseDouble(odometerField.getText()), Double.parseDouble(fuelCapacityField.getText()), TyreType.valueOf(String.valueOf(tyreTypeField.getSelectionModel().getSelectedItem())));
-//        truckList.add(truck);
         truckListField.getItems().add(truck);
-//        if(truckList!= null) {
-//            for (Truck truck1 : truckList) {
-//                truckListField.getItems().add(truck1);
-//
-//            }
-//        }
 
     }
 
     public void updateTruck() {
-//        System.out.println(truckList);
-
         Truck selectedTruck = truckListField.getSelectionModel().getSelectedItem();
         int index = truckListField.getSelectionModel().getSelectedIndex();
         selectedTruck.setMake(makeField.getText());
@@ -101,13 +150,6 @@ public class MainPage implements Initializable {
         selectedTruck.setTyreType(TyreType.valueOf(String.valueOf(tyreTypeField.getSelectionModel().getSelectedItem())));
         System.out.println(index);
         truckListField.getItems().set(index, selectedTruck);
-//        truckList.set(index, selectedTruck);
-//        if(truckList!= null) {
-//            for (Truck truck1 : truckList) {
-//                truckListField.getItems().add(truck1);
-//            }
-//        }
-
     }
 
     public void deleteTruck() {
@@ -150,23 +192,24 @@ public class MainPage implements Initializable {
         int index = cargoListField.getSelectionModel().getSelectedIndex();
         cargo.setTitle(titleField.getText());
         cargo.setCargoType(CargoType.valueOf(String.valueOf(CargoTypeField.getSelectionModel().getSelectedItem())));
-        cargo.setWeight( Double.parseDouble(weightField.getText()));
+        cargo.setWeight(Double.parseDouble(weightField.getText()));
         cargo.setCustomer(customerField.getText());
         cargo.setDescription(descriptionField.getText());
-        cargoListField.getItems().set(index,cargo);
+        cargoListField.getItems().set(index, cargo);
     }
 
 
-    public void changeCargo(MouseEvent mouseEvent) {cargoListField.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cargo>() {
-        @Override
-        public void changed(ObservableValue<? extends Cargo> observable, Cargo oldValue, Cargo newValue) {
-            titleField.setText(newValue.getTitle());
-            weightField.setText(String.valueOf(newValue.getWeight()));
-            customerField.setText(newValue.getCustomer());
-            descriptionField.setText(newValue.getDescription());
-        }
+    public void changeCargo(MouseEvent mouseEvent) {
+        cargoListField.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cargo>() {
+            @Override
+            public void changed(ObservableValue<? extends Cargo> observable, Cargo oldValue, Cargo newValue) {
+                titleField.setText(newValue.getTitle());
+                weightField.setText(String.valueOf(newValue.getWeight()));
+                customerField.setText(newValue.getCustomer());
+                descriptionField.setText(newValue.getDescription());
+            }
 
 
-    });
+        });
     }
 }

@@ -8,6 +8,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,17 +20,35 @@
         <tabs>
           <Tab text="User Management">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="driverTable" prefHeight="147.0" prefWidth="600.0">
+                          <columns>
+                            <TableColumn fx:id="idCol" prefWidth="75.0" text="id" />
+                            <TableColumn fx:id="loginCol" prefWidth="75.0" text="login" />
+                              <TableColumn fx:id="nameCol" prefWidth="75.0" text="name" />
+                              <TableColumn fx:id="licenseCol" prefWidth="75.0" text="license No" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="managerTable" layoutY="147.0" prefHeight="190.0" prefWidth="600.0">
+                          <columns>
+                            <TableColumn fx:id="mIdCol" prefWidth="75.0" text="id " />
+                            <TableColumn fx:id="mLoginCol" prefWidth="75.0" text="login" />
+                              <TableColumn fx:id="mNameCol" prefWidth="75.0" text="name" />
+                              <TableColumn fx:id="mEmailCol" prefWidth="75.0" text="email" />
+                          </columns>
+                        </TableView>
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab text="Cargo Management">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="cargoListField" onMouseClicked="#changeCargo" layoutX="14.0" layoutY="34.0" prefHeight="291.0" prefWidth="200.0" />
+                        <ListView fx:id="cargoListField" layoutX="14.0" layoutY="34.0" onMouseClicked="#changeCargo" prefHeight="291.0" prefWidth="200.0" />
                         <TextField fx:id="titleField" layoutX="226.0" layoutY="53.0" promptText="Title:" />
                         <TextField fx:id="weightField" layoutX="226.0" layoutY="122.0" promptText="Weight:" />
-                        <ComboBox fx:id="CargoTypeField" layoutX="417.0" layoutY="52.0" prefHeight="26.0" prefWidth="146.0" >
+                        <ComboBox fx:id="CargoTypeField" layoutX="417.0" layoutY="52.0" prefHeight="26.0" prefWidth="146.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="PAPER" />

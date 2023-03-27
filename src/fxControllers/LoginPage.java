@@ -1,5 +1,7 @@
 package fxControllers;
 
+import hibernateControllers.GenericController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +11,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Driver;
 import model.Manager;
 import model.User;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.GeneratedValue;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,29 +30,30 @@ public class LoginPage {
     public PasswordField passwordField;
 
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("FreightSys");
+    GenericController genericController = new GenericController(entityManagerFactory);
 
-    //temp
-    User user = new Manager("admin", "admin", "admin", "admin", LocalDate.parse("2000-01-01"),"asdasd","asdasf");
-    public void validate() throws IOException {
-        if(Objects.equals(loginField.getText(), "admin") && Objects.equals(passwordField.getText(), "admin")) {
-            FXMLLoader fxmlLoader = new FXMLLoader(LoginPage.class.getResource("../view/main-page.fxml"));
-            Parent parent = fxmlLoader.load();
-            MainPage mainPage = fxmlLoader.getController();
-            mainPage.setInfo(user);
-            Scene scene = new Scene(parent);
-            Stage stage = (Stage) loginField.getScene().getWindow();
-            stage.setTitle("FreightSystem");
-            stage.setScene(scene);
-            stage.show();
-        }
-        else{
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Login Failed");
-            alert.setContentText("The username or password is incorrect.");
+    public void validate() throws Exception {
+//        Driver user = genericController.findDriverByCredentials(loginField.getText(), passwordField.getText());
 
-            alert.showAndWait();
-        }
+            User user = genericController.findUserByCredentials(loginField.getText(), passwordField.getText());
+            if(user != null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(LoginPage.class.getResource("../view/main-page.fxml"));
+                Parent parent = fxmlLoader.load();
+                MainPage mainPage = fxmlLoader.getController();
+                mainPage.setInfo(user, entityManagerFactory);
+                Scene scene = new Scene(parent);
+                Stage stage = (Stage) loginField.getScene().getWindow();
+                stage.setTitle("FreightSystem");
+                stage.setScene(scene);
+                stage.show();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Login Failed");
+                alert.setContentText("The username or password is incorrect.");
+                alert.showAndWait();
+            }
     }
 
     public void register() throws IOException {
@@ -58,7 +64,7 @@ public class LoginPage {
 //        MainPage mainPage = fxmlLoader.getController();
 //        mainPage.setInfo(user);
         Scene scene = new Scene(parent);
-        Stage stage = (Stage)loginField.getScene().getWindow();
+        Stage stage = (Stage) loginField.getScene().getWindow();
         stage.setTitle("FreightSystem");
         stage.setScene(scene);
         stage.show();
